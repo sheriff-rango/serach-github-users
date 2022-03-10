@@ -9,10 +9,12 @@ import {
   UserListHeaderTitle,
   UserListSearchInput,
   UserListContainer,
+  NoUsersSpan,
   UserListLength,
   UserListItem,
   UserImage,
   UserName,
+  GotoUserRepo,
 } from './styled'
 
 const UserLIst: React.FC = () => {
@@ -30,6 +32,11 @@ const UserLIst: React.FC = () => {
     }
   }
 
+  const handleGotoRepos = (userItem, e) => {
+    e.stopPropagation()
+    window.open(`${userItem.html_url}?tab=repositories`)
+  }
+
   return (
     <UserListWrapper>
       <UserListHeader>
@@ -42,14 +49,19 @@ const UserLIst: React.FC = () => {
       </UserListHeader>
       <UserListLength>total: {userList.length}</UserListLength>
       <UserListContainer ref={userListContainerRef} onScroll={handleOnScrollUserListContainer}>
-        {userList.map((userItem, userIndex) => {
-          return (
-            <UserListItem key={userIndex} onClick={() => navigate(`/user/${userItem.login}`)}>
-              <UserImage src={userItem.avatar_url} alt={userItem.login} />
-              <UserName>{userItem.login}</UserName>
-            </UserListItem>
-          )
-        })}
+        {userList.length ? (
+          userList.map((userItem, userIndex) => {
+            return (
+              <UserListItem key={userIndex} onClick={() => navigate(`/user/${userItem.login}`)}>
+                <UserImage src={userItem.avatar_url} alt={userItem.login} />
+                <UserName>{userItem.login}</UserName>
+                <GotoUserRepo onClick={(e) => handleGotoRepos(userItem, e)}>Repos</GotoUserRepo>
+              </UserListItem>
+            )
+          })
+        ) : (
+          <NoUsersSpan>No Matched Users</NoUsersSpan>
+        )}
       </UserListContainer>
     </UserListWrapper>
   )

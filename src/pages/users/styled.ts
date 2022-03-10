@@ -31,9 +31,15 @@ export const UserListContainer = styled.div`
   user-select: none;
 `
 
+export const NoUsersSpan = styled.p`
+  font-size: 20px;
+  margin: 20px;
+  text-align: center;
+`
+
 export const UserListItem = styled.div`
   display: grid;
-  grid-template-columns: 100px 1fr 200px;
+  grid-template-columns: 100px 1fr 50px;
   grid-gap: 20px;
   align-items: center;
   cursor: pointer;
@@ -50,4 +56,11 @@ export const UserName = styled.span`
   height: max-content;
   font-size: 20px;
   font-weight: bold;
+`
+
+export const GotoUserRepo = styled.span`
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
 `

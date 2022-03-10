@@ -18,7 +18,7 @@ export const UserDetailMainInfoContainer = styled.div`
 `
 
 export const UserMainImage = styled.img`
-  width: 40%;
+  height: 300px;
   margin-right: 20px;
 `
 
@@ -40,10 +40,31 @@ export const UserMainInfoItemContent = styled.div`
   font-weight: bold;
 `
 
+export const UserRepoSearchPanel = styled.div``
+
+export const StyledP = styled.p`
+  font-size: 18px;
+  margin: 20px 0 40px;
+  text-align: center;
+`
+
+export const UserRepoSearchInput = styled.input`
+  width: 100%;
+  font-size: 16px;
+  padding: 10px;
+`
+
 export const UserDetailRepoContainer = styled.div`
-  height: calc(100% - 365px - 20px);
+  height: calc(100% - 343px - 106px - 20px);
   margin-top: 20px;
   overflow: auto;
+  user-select: none;
+`
+
+export const NoReposSpan = styled.p`
+  font-size: 20px;
+  margin: 20px;
+  text-align: center;
 `
 
 export const UserDetailRepoItem = styled.div`
@@ -53,6 +74,7 @@ export const UserDetailRepoItem = styled.div`
   font-size: 20px;
   margin: 10px 0;
   padding: 0 10px;
+  cursor: pointer;
 `
 
 export const UserDetailRepoName = styled.div``

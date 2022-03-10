@@ -1,13 +1,14 @@
 const axios = require('axios')
 
 const COUNTS_PER_PAGE = 20
+const GITHUB_ACCESS_TOKEN = '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'
 
 function fetch({ method, url, headers, data }: { method?: string; url: string; headers?: any; data?: any }) {
   return axios({
     method: (method || 'get').toLowerCase(),
     url: url,
     headers: headers || {
-      authorization: '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',
+      authorization: GITHUB_ACCESS_TOKEN,
       Accept: 'application/vnd.github.v3+json',
     },
     data,
