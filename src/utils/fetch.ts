@@ -1,21 +1,13 @@
 const axios = require('axios')
 
-function fetch({
-  method,
-  url,
-  headers = { 'content-type': 'application/json' },
-  data,
-}: {
-  method?: string
-  url: string
-  headers?: any
-  data?: any
-}) {
+const COUNTS_PER_PAGE = 20
+
+function fetch({ method, url, headers, data }: { method?: string; url: string; headers?: any; data?: any }) {
   return axios({
     method: (method || 'get').toLowerCase(),
     url: url,
     headers: headers || {
-      authorization: 'token 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',
+      authorization: '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',
       Accept: 'application/vnd.github.v3+json',
     },
     data,
@@ -23,29 +15,31 @@ function fetch({
 }
 
 export async function getUserList({ q, page }: { q: string; page?: number }) {
-  let fetchedData = []
+  let result = [],
+    fetchedResult: any = []
   try {
-    const baseUrl = `https://api.github.com/search/users?q=${q}&&per_page=30&&page=${page || 1}`
+    const baseUrl = `https://api.github.com/search/users?q=${q}&&per_page=${COUNTS_PER_PAGE}&&page=${page || 1}`
     const result = await fetch({ url: baseUrl })
-    const currentFetchedResult = result.data
-    fetchedData = fetchedData.concat(currentFetchedResult.items)
-    let total = currentFetchedResult.total_count
-    const totalPageCount = Math.ceil(total / 30)
-    console.log('total', total)
-    // while (total > 100) {
-    //   page++
-    //   const nextPageUrl = `${baseUrl}&&page=${page}`
-    //   const nextPageResult = await fetch({
-    //     url: nextPageUrl,
-    //   })
-    //   const currentPageResult = nextPageResult.data
-    //   fetchedData = fetchedData.concat(currentPageResult.items)
-    //   total -= 100
-    // }
-    return { result: fetchedData, totalPageCount }
+    fetchedResult = result.data
   } catch (err) {
     console.error('axios error', err)
-    return fetchedData
+    return result
+  }
+  try {
+    fetchedResult.items?.map(async (userItem) => {
+      // const currentRepos = await await fetch({ url: userItem.repos_url })
+      const currentRepos = { data: [] }
+      result.push({
+        ...userItem,
+        repoCount: currentRepos.data?.length || 0,
+      })
+    })
+    let total = fetchedResult.total_count
+    const totalPageCount = Math.ceil(total / COUNTS_PER_PAGE)
+    return { result: result, totalPageCount }
+  } catch (err) {
+    console.error('axios error', err)
+    return result
   }
 }
 
@@ -53,7 +47,8 @@ export async function getUserDetail(id: string) {
   try {
     const baseUrl = `https://api.github.com/users/${id}`
     const result = await fetch({ url: baseUrl })
-    console.log(result)
+    const reposResult = await fetch({ url: `${baseUrl}/repos` })
+    return { ...result.data, repos: reposResult.data }
   } catch (err) {
     console.error('axios error', err)
     return null
